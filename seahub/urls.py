@@ -196,6 +196,8 @@ urlpatterns = [
     url(r'^oauth/', include('seahub.oauth.urls')),
     url(r'^thirdparty-editor/', include('seahub.thirdparty_editor.urls')),
 
+    url(r'^weboffice-api/', include('seahub.weboffice.urls')),
+
     url(r'^$', react_fake_view, name='libraries'),
     #url(r'^home/$', direct_to_template, { 'template': 'home.html' } ),
     url(r'^robots\.txt$', TemplateView.as_view(template_name='robots.txt', content_type='text/plain')),

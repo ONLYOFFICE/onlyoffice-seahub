@@ -137,6 +137,9 @@ from seahub.thirdparty_editor.settings import ENABLE_THIRDPARTY_EDITOR
 from seahub.thirdparty_editor.settings import THIRDPARTY_EDITOR_ACTION_URL_DICT
 from seahub.thirdparty_editor.settings import THIRDPARTY_EDITOR_ACCESS_TOKEN_EXPIRATION
 
+from seahub.weboffice.settings import ENABLE_WPS_WEBOFFICE, WPS_WEBOFFICE_FILE_EXTENSION
+from seahub.weboffice.utils import get_edit_url
+
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
 
@@ -856,6 +859,16 @@ def view_lib_file(request, repo_id, path):
             cache.set('BISHENG_OFFICE_' + doc_id, bisheng_info_dict, None)
 
             return HttpResponseRedirect(editor_url)
+
+        if ENABLE_WPS_WEBOFFICE and fileext in WPS_WEBOFFICE_FILE_EXTENSION:
+
+            can_edit = False
+            if parse_repo_perm(permission).can_edit_on_web and \
+                    ((not is_locked) or (is_locked and locked_by_online_office)):
+                can_edit = True
+
+            wps_weboffice_editor_url = get_edit_url(can_edit, file_id, fileext)
+            return HttpResponseRedirect(wps_weboffice_editor_url)
 
         if not HAS_OFFICE_CONVERTER:
             return_dict['err'] = "File preview unsupported"
