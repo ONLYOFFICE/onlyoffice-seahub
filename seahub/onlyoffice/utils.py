@@ -17,8 +17,9 @@ from seahub.utils import get_file_type_and_ext, gen_file_get_url, \
 from seahub.utils.file_op import if_locked_by_online_office
 
 from seahub.settings import ENABLE_WATERMARK
-from seahub.onlyoffice.settings import ONLYOFFICE_APIJS_URL, \
-        ONLYOFFICE_FORCE_SAVE, ONLYOFFICE_JWT_SECRET
+from seahub.onlyoffice.settings import ONLYOFFICE_APIJS_URL, ONLYOFFICE_FORCE_SAVE
+
+from constance import config
 
 # Get an instance of a logger
 logger = logging.getLogger('onlyoffice')
@@ -114,7 +115,7 @@ def get_onlyoffice_dict(request, username, repo_id, file_path, file_id='',
     return_dict = {
         'repo_id': repo_id,
         'path': file_path,
-        'ONLYOFFICE_APIJS_URL': ONLYOFFICE_APIJS_URL,
+        'ONLYOFFICE_APIJS_URL': config.ONLYOFFICE_DOCUMENT_SERVER_ADDRESS + ONLYOFFICE_APIJS_URL,
         'file_type': fileext,
         'doc_key': doc_key,
         'doc_title': file_name,
@@ -128,9 +129,9 @@ def get_onlyoffice_dict(request, username, repo_id, file_path, file_id='',
         'enable_watermark': ENABLE_WATERMARK,
     }
 
-    if ONLYOFFICE_JWT_SECRET:
+    if config.ONLYOFFICE_JWT_SECRET:
         import jwt
-        config = {
+        onlyoffice_config = {
             "document": {
                 "fileType": fileext,
                 "key": doc_key,
@@ -157,6 +158,6 @@ def get_onlyoffice_dict(request, username, repo_id, file_path, file_id='',
             }
         }
 
-        return_dict['onlyoffice_jwt_token'] = jwt.encode(config, ONLYOFFICE_JWT_SECRET)
+        return_dict['onlyoffice_jwt_token'] = jwt.encode(onlyoffice_config, config.ONLYOFFICE_JWT_SECRET)
 
     return return_dict

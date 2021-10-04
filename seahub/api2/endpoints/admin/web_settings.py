@@ -29,11 +29,13 @@ DIGIT_WEB_SETTINGS = [
     'LOGIN_ATTEMPT_LIMIT', 'FREEZE_USER_ON_LOGIN_FAILED',
     'ENABLE_SHARE_TO_ALL_GROUPS', 'ENABLE_TWO_FACTOR_AUTH',
     'ENABLE_BRANDING_CSS', 'ENABLE_TERMS_AND_CONDITIONS',
-    'ENABLE_USER_CLEAN_TRASH', 'SHARE_LINK_TOKEN_LENGTH'
+    'ENABLE_USER_CLEAN_TRASH', 'SHARE_LINK_TOKEN_LENGTH',
+    'VERIFY_ONLYOFFICE_CERTIFICATE',
 ]
 
 STRING_WEB_SETTINGS = ('SERVICE_URL', 'FILE_SERVER_ROOT', 'TEXT_PREVIEW_EXT',
-                       'SITE_NAME', 'SITE_TITLE', 'CUSTOM_CSS')
+                       'SITE_NAME', 'SITE_TITLE', 'CUSTOM_CSS', 'ONLYOFFICE_DOCUMENT_SERVER_ADDRESS',
+                       'ONLYOFFICE_JWT_HEADER', 'ONLYOFFICE_JWT_SECRET')
 
 
 class AdminWebSettings(APIView):
@@ -87,7 +89,7 @@ class AdminWebSettings(APIView):
                     error_msg = 'value invalid.'
                     return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
-            if (key in STRING_WEB_SETTINGS and key != 'CUSTOM_CSS') and not value:
+            if (key in STRING_WEB_SETTINGS and key != 'CUSTOM_CSS' and key != 'ONLYOFFICE_JWT_SECRET') and not value:
                 error_msg = 'value invalid.'
                 return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 

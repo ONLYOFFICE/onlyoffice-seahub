@@ -113,7 +113,7 @@ except ImportError:
 
 # onlyoffice
 try:
-    from seahub.settings import ENABLE_ONLYOFFICE
+    from seahub.onlyoffice.settings import ENABLE_ONLYOFFICE
 except ImportError:
     ENABLE_ONLYOFFICE = False
 

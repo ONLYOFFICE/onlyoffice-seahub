@@ -2,7 +2,9 @@ import logging
 import requests
 
 from seahub.onlyoffice.converterUtils import getFileName, getFileExt
-from seahub.onlyoffice.settings import ONLYOFFICE_CONVERTER_URL, ONLYOFFICE_JWT_SECRET, ONLYOFFICE_JWT_HEADER
+from seahub.onlyoffice.settings import ONLYOFFICE_CONVERTER_URL
+
+from constance import config
 
 logger = logging.getLogger(__name__)
 
@@ -26,14 +28,14 @@ def getConverterUri(docUri, fromExt, toExt, docKey, isAsync, filePass = None):
     if isAsync:
         payload.setdefault('async', True)
 
-    if ONLYOFFICE_JWT_SECRET:
+    if config.ONLYOFFICE_JWT_SECRET:
         import jwt
-        token = jwt.encode(payload, ONLYOFFICE_JWT_SECRET, algorithm='HS256')
-        headerToken = jwt.encode({'payload': payload}, ONLYOFFICE_JWT_SECRET, algorithm='HS256')
+        token = jwt.encode(payload, config.ONLYOFFICE_JWT_SECRET, algorithm='HS256')
+        headerToken = jwt.encode({'payload': payload}, config.ONLYOFFICE_JWT_SECRET, algorithm='HS256')
         payload['token'] = token
-        headers[ONLYOFFICE_JWT_HEADER] = f'Bearer {headerToken}'
+        headers[config.ONLYOFFICE_JWT_HEADER] = f'Bearer {headerToken}'
 
-    response = requests.post(ONLYOFFICE_CONVERTER_URL, json=payload, headers=headers )
+    response = requests.post(config.ONLYOFFICE_DOCUMENT_SERVER_ADDRESS + ONLYOFFICE_CONVERTER_URL, json=payload, headers=headers )
     json = response.json()
 
     return getResponseUri(json)

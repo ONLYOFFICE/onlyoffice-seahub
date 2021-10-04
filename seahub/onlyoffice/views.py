@@ -10,12 +10,13 @@ from django.views.decorators.csrf import csrf_exempt
 from django.shortcuts import render
 
 from seaserv import seafile_api
-from seahub.onlyoffice.settings import VERIFY_ONLYOFFICE_CERTIFICATE
 from seahub.onlyoffice.utils import generate_onlyoffice_cache_key, get_onlyoffice_dict
 from seahub.onlyoffice.converterUtils import getFileNameWithoutExt, getFileExt, getFileType, getInternalExtension, getFilePathWithoutName
 from seahub.onlyoffice.converter import getConverterUri
 from seahub.utils import gen_inner_file_upload_url, is_pro_version
 from seahub.utils.file_op import if_locked_by_online_office
+
+from constance import config
 
 
 # Get an instance of a logger
@@ -111,7 +112,7 @@ def onlyoffice_editor_callback(request):
         # Defines the link to the edited document to be saved with the document storage service.
         # The link is present when the status value is equal to 2 or 3 only.
         url = post_data.get('url')
-        onlyoffice_resp = requests.get(url, verify=VERIFY_ONLYOFFICE_CERTIFICATE)
+        onlyoffice_resp = requests.get(url, verify=config.VERIFY_ONLYOFFICE_CERTIFICATE)
         if not onlyoffice_resp:
             logger.error('[OnlyOffice] No response from file content url.')
             return HttpResponse('{"error": 0}')
@@ -199,7 +200,7 @@ def onlyoffice_convert(request):
         logger.error('[OnlyOffice] No response from file converter.')
         return HttpResponse(status=500)
 
-    onlyoffice_resp = requests.get(newUri, verify=VERIFY_ONLYOFFICE_CERTIFICATE)
+    onlyoffice_resp = requests.get(newUri, verify=config.VERIFY_ONLYOFFICE_CERTIFICATE)
 
     if not onlyoffice_resp:
         logger.error('[OnlyOffice] No response from file content url.')

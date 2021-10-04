@@ -1,7 +1,7 @@
 import React, { Component, Fragment } from 'react';
 import { Utils } from '../../../utils/utils';
 import { seafileAPI } from '../../../utils/seafile-api';
-import { gettext, isPro, mediaUrl, logoPath, faviconPath, loginBGPath } from '../../../utils/constants';
+import { gettext, isPro, mediaUrl, logoPath, faviconPath, loginBGPath, enableOnlyoffice } from '../../../utils/constants';
 import Loading from '../../../components/loading';
 import toaster from '../../../components/toast';
 import MainPanelTopbar from '../main-panel-topbar';
@@ -352,6 +352,39 @@ class WebSettings extends Component {
                     value={config_dict['ENABLE_TERMS_AND_CONDITIONS']}
                     helpTip={gettext('Enable system admin to add Terms and Conditions, and all users will have to accept the terms.')}
                   />
+                </Section>}
+
+                {enableOnlyoffice && <Section headingText={gettext('ONLYOFFICE')}>
+                  <Fragment>
+                    <InputItem
+                      saveSetting={this.saveSetting}
+                      displayName={gettext('ONLYOFFICE Document Server Address')}
+                      keyText='ONLYOFFICE_DOCUMENT_SERVER_ADDRESS'
+                      value={config_dict['ONLYOFFICE_DOCUMENT_SERVER_ADDRESS']}
+                      helpTip={gettext('ONLYOFFICE Document Server URL (http(s)://<host>:<port>/)')}
+                    />
+                    <InputItem
+                      saveSetting={this.saveSetting}
+                      displayName={gettext('ONLYOFFICE JWT Header')}
+                      keyText='ONLYOFFICE_JWT_HEADER'
+                      value={config_dict['ONLYOFFICE_JWT_HEADER']}
+                      helpTip={gettext('ONLYOFFICE JWT Header (default: Authorization)')}
+                    />
+                    <InputItem
+                      saveSetting={this.saveSetting}
+                      displayName={gettext('ONLYOFFICE JWT Secret')}
+                      keyText='ONLYOFFICE_JWT_SECRET'
+                      value={config_dict['ONLYOFFICE_JWT_SECRET']}
+                      helpTip={gettext('Leave blank to disable')}
+                    />
+                    <CheckboxItem
+                      saveSetting={this.saveSetting}
+                      displayName='ONLYOFFICE Certificate Verification'
+                      keyText='VERIFY_ONLYOFFICE_CERTIFICATE'
+                      value={config_dict['VERIFY_ONLYOFFICE_CERTIFICATE']}
+                      helpTip={gettext('Enable/Disable ONLYOFFICE certificate verification')}
+                    />
+                  </Fragment>
                 </Section>}
               </Fragment>
               }
